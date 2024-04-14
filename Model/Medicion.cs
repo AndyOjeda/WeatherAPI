@@ -19,7 +19,7 @@ namespace WeatherAPI.Model
         public required int EstacionId { get; set; }
 
         [ForeignKey("EstacionId")]
-        public Estacion Estacion { get; set; }
+        public Estacion estacion { get; set; }
     
     }
 }
