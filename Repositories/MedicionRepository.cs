@@ -15,7 +15,7 @@ namespace WeatherAPI.Repositories
             float Humedad,
             float Presion,
             float Precipitacion,
-            float TradiacionSolar,
+            float RadiacionSolar,
             float VelocidadViento,
             float DireccionViento,
             int EstacionId
@@ -48,7 +48,7 @@ namespace WeatherAPI.Repositories
             float Humedad,
             float Presion,
             float Precipitacion,
-            float TradiacionSolar,
+            float RadiacionSolar,
             float VelocidadViento,
             float DireccionViento,
             int EstacionId
@@ -60,7 +60,7 @@ namespace WeatherAPI.Repositories
                 Humedad = Humedad,
                 Presion = Presion,
                 Precipitacion = Precipitacion,
-                TradiacionSolar = TradiacionSolar,
+                RadiacionSolar = RadiacionSolar,
                 VelocidadViento = VelocidadViento,
                 DireccionViento = DireccionViento,
                 EstacionId = EstacionId

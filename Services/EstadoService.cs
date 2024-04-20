@@ -15,11 +15,11 @@ namespace WeatherAPI.Servicios
         Task<Estado?> DeleteEstado(int id);
     }
 
-    public class EstadoServicio : IEstadoServicio
+    public class EstadoService : IEstadoServicio
     {
         private readonly IEstadoRepository _estadoRepository;
 
-        public EstadoServicio(IEstadoRepository estadoRepository)
+        public EstadoService(IEstadoRepository estadoRepository)
         {
             _estadoRepository = estadoRepository;
         }

@@ -10,16 +10,25 @@ namespace WeatherAPI.Servicios
     {
         Task<List<Estacion>> GetAll();
         Task<Estacion?> GetEstacion(int id);
-        Task<Estacion> AddEstacion(string Nombre, string Ubicacion, string marca, int EstadoId);
-        Task<Estacion> UpdateEstacion(int id, string Nombre, string Ubicacion, string marca, int EstadoId); // Agregado 'id' como parámetro
+        Task<Estacion> AddEstacion(
+                        string Nombre, 
+                        string Ubicacion, 
+                        string marca, 
+                        int EstadoId);
+        Task<Estacion> UpdateEstacion(
+                         int id, 
+                         string Nombre, 
+                         string Ubicacion, 
+                         string marca, 
+                         int EstadoId); 
         Task<Estacion?> DeleteEstacion(int id);
     }
 
-    public class EstacionServicio : IEstacionServicio
+    public class EstacionService : IEstacionServicio
     {
         private readonly IEstacionRepository _estacionRepository;
 
-        public EstacionServicio(IEstacionRepository estacionRepository)
+        public EstacionService(IEstacionRepository estacionRepository)
         {
             _estacionRepository = estacionRepository;
         }
@@ -34,12 +43,25 @@ namespace WeatherAPI.Servicios
             return await _estacionRepository.GetEstacion(id);
         }
 
-        public async Task<Estacion> AddEstacion(string Nombre, string Ubicacion, string marca, int EstadoId)
+        public async Task<Estacion> AddEstacion(
+                                    string Nombre, 
+                                    string Ubicacion, 
+                                    string marca,
+                                    int EstadoId)
         {
-            return await _estacionRepository.AddEstacion(Nombre, Ubicacion, marca, EstadoId);
+            return await _estacionRepository.AddEstacion(
+                                                Nombre, 
+                                                Ubicacion, 
+                                                marca, 
+                                                EstadoId);
         }
 
-        public async Task<Estacion> UpdateEstacion(int id, string Nombre, string Ubicacion, string marca, int EstadoId)
+        public async Task<Estacion> UpdateEstacion(
+                                        int id, 
+                                        string Nombre, 
+                                        string Ubicacion, 
+                                        string marca, 
+                                        int EstadoId)
         {
             Estacion? estacion = await _estacionRepository.GetEstacion(id);
             if (estacion == null)

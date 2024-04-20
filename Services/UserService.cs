@@ -11,15 +11,19 @@ namespace WeatherAPI.Servicios
         Task<List<User>> GetAll();
         Task<User?> GetUser(int id);
         Task<User> AddUser(
-                                   string Nombre, 
-                                                          string Apellido, 
-                                                                                 string Email, 
-                                                                                                        string Password);
-        Task<User> UpdateUser(
-                                   string Nombre, 
-                                                          string Apellido, 
-                                                                                 string Email, 
-                                                                                                        string Password)
+                                   
+                    string Nombre, 
+                                                          
+                    string Apellido, 
+                                                                                 
+                    string Email, 
+                                                                                                        
+                    string Password);
+        public async Task<User> UpdateUser(
+            string Nombre,
+            string Apellido,
+            string Email,
+            string Password)
         {
             if (Nombre == null)
             {
@@ -37,11 +41,12 @@ namespace WeatherAPI.Servicios
             {
                 throw new ArgumentNullException(nameof(Password));
             }
-            return await _userRepository.UpdateUser(Nombre, Apellido, Email, Password);
+            return await _userRepository.UpdateUser(user);
         }
+
         Task<User?> DeleteUser(int id);
     }
-    public class UserServicio
+    public class UserService
     {
     }
 }

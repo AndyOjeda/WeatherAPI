@@ -15,11 +15,11 @@ namespace WeatherAPI.Servicios
         Task<Medicion?> DeleteMedicion(int id);
     }
 
-    public class MedicionServicio : IMedicionServicio
+    public class MedicionService : IMedicionServicio
     {
         private readonly IMedicionRepository _medicionRepository;
 
-        public MedicionServicio(IMedicionRepository medicionRepository)
+        public MedicionService(IMedicionRepository medicionRepository)
         {
             _medicionRepository = medicionRepository;
         }
@@ -34,16 +34,16 @@ namespace WeatherAPI.Servicios
             return await _medicionRepository.GetMedicion(id);
         }
 
-        public async Task<Medicion> AddMedicion(DateTime Fecha, double Temperatura, double Humedad, double Presion, int EstacionId)
+        public async Task<Medicion> AddMedicion(DateTime Fecha, float Temperatura, float Humedad, float Presion, float Precipitacion, float RadiacionSolar, float VelocidadViento, float DireccionViento, int EstacionId)
         {
-            return await _medicionRepository.AddMedicion(Fecha, Temperatura, Humedad, Presion, EstacionId);
+            return await _medicionRepository.AddMedicion(Fecha, Temperatura, Humedad, Presion, Precipitacion, RadiacionSolar, VelocidadViento, DireccionViento, EstacionId);
         }
 
         public async Task<Medicion> UpdateMedicion(DateTime Fecha, double Temperatura, double Humedad, double Presion, int EstacionId)
         {
             // No se pueden asignar valores nulos a tipos no anulables como DateTime y double,
             // por lo tanto, los valores predeterminados ya son 0 para double y DateTime.Now para DateTime.
-            return await _medicionRepository.UpdateMedicion(Fecha, Temperatura, Humedad, Presion, EstacionId);
+            return await _medicionRepository.UpdateMedicion(Fecha, Temperatura, Humedad, Presion, Precipitacion, RadiacionSolar, VelocidadViento, DireccionViento, EstacionId);
         }
 
         public async Task<Medicion?> DeleteMedicion(int id)
