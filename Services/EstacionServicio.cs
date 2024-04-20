@@ -61,7 +61,7 @@ namespace WeatherAPI.Servicios
                                      string marca, 
                                      int EstadoId)
         {
-            Estacion? estacion = await _estacionRepository.GetEstacion(int id);
+            Estacion? estacion = await _estacionRepository.GetEstacion( id);
             if (estacion == null)
             {
                 throw new Exception("Estacion no encontrada");
