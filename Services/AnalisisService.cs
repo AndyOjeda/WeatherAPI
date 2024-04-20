@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using WeatherAPI.Model;
 using WeatherAPI.Repositories;
 
-namespace WeatherAPI.Servicios
+namespace WeatherAPI.Services
 {
     public interface IAnalisisServicio
     {

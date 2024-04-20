@@ -12,7 +12,7 @@ namespace WeatherAPI.Model
         public required float Humedad { get; set; }
         public required float Presion { get; set; }
         public required float Precipitacion { get; set; }
-        public required float TradiacionSolar { get; set; }
+        public required float RadiacionSolar { get; set; }
         public required float VelocidadViento { get; set; }
         public required float DireccionViento { get; set; }
 
