@@ -1,0 +1,94 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using WeatherAPI.Model;
+using WeatherAPI.Repositories;
+
+namespace WeatherAPI.Servicios
+{
+    public interface IEstacionServicio
+    {
+        Task<List<Estacion>> GetAll();
+        Task<Estacion?> GetEstacion(int id);
+        Task<Estacion> AddEstacion(
+                        string Nombre, 
+                        string Ubicacion, 
+                        string marca, 
+                        int EstadoId);
+        Task<Estacion> UpdateEstacion(
+                        string Nombre, 
+                        string Ubicacion, 
+                        string marca, 
+                        int EstadoId);
+        Task<Estacion?> DeleteEstacion(int id);
+    }
+
+    public class EstacionServicio : IEstacionServicio
+    {
+        private readonly IEstacionRepository _estacionRepository;
+
+        public EstacionServicio(IEstacionRepository estacionRepository)
+        {
+            _estacionRepository = estacionRepository;
+        }
+
+        public async Task<List<Estacion>> GetAll()
+        {
+            return await _estacionRepository.GetAll();
+        }
+
+        public async Task<Estacion?> GetEstacion(int id)
+        {
+            return await _estacionRepository.GetEstacion(id);
+        }
+
+        public async Task<Estacion> AddEstacion(
+                                    string Nombre, 
+                                    string Ubicacion, 
+                                    string marca, 
+                                    int EstadoId)
+        {
+            return await _estacionRepository.AddEstacion(
+                                               Nombre, 
+                                               Ubicacion, 
+                                               marca, 
+                                               EstadoId);
+        }
+
+        public async Task<Estacion> UpdateEstacion(
+                                     string Nombre, 
+                                     string Ubicacion, 
+                                     string marca, 
+                                     int EstadoId)
+        {
+            Estacion? estacion = await _estacionRepository.GetEstacion(int id);
+            if (estacion == null)
+            {
+                throw new Exception("Estacion no encontrada");
+            }
+            if (Nombre != null)
+            {
+                estacion.Nombre = Nombre;
+            }
+            if (Ubicacion != null)
+            {
+                estacion.Ubicacion = Ubicacion;
+            }
+            if (marca != null)
+            {
+                estacion.marca = marca;
+            }
+            if (EstadoId != null)
+            {
+                estacion.EstadoId = EstadoId;
+            }
+            return await _estacionRepository.UpdateEstacion(estacion);
+        }
+
+        public async Task<Estacion?> DeleteEstacion(int id)
+        {
+            return await _estacionRepository.DeleteEstacion(id);
+        }
+    }
+}
+
