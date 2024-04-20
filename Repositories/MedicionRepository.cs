@@ -2,7 +2,7 @@
 using WeatherAPI.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace factoryApi.Repositories
+namespace WeatherAPI.Repositories
 {
 
     public interface IMedicionRepository
@@ -10,8 +10,15 @@ namespace factoryApi.Repositories
         Task<List<Medicion>> GetAll();
         Task<Medicion?> GetMedicion(int id);
         Task<Medicion> AddMedicion(
-            string MedicionName,
-            int MedicionAmount
+            DateTime FechaMedicion,
+            float Temperatura,
+            float Humedad,
+            float Presion,
+            float Precipitacion,
+            float TradiacionSolar,
+            float VelocidadViento,
+            float DireccionViento,
+            int EstacionId
             );
         Task<Medicion> UpdateMedicion(Medicion Medicion);
         Task<Medicion?> DeleteMedicion(int id);
@@ -37,15 +44,27 @@ namespace factoryApi.Repositories
         }
 
         public async Task<Medicion> AddMedicion(
-            string MedicionName,
-            int MedicionAmount
+            float Temperatura,
+            float Humedad,
+            float Presion,
+            float Precipitacion,
+            float TradiacionSolar,
+            float VelocidadViento,
+            float DireccionViento,
+            int EstacionId
         )
         {
             Medicion Medicion = new Medicion
             {
-                MedicionName = MedicionName,
-                MedicionAmount = MedicionAmount,
-                IsDeleted = false
+                Temperatura = Temperatura,
+                Humedad = Humedad,
+                Presion = Presion,
+                Precipitacion = Precipitacion,
+                TradiacionSolar = TradiacionSolar,
+                VelocidadViento = VelocidadViento,
+                DireccionViento = DireccionViento,
+                EstacionId = EstacionId
+
             };
             _context.Medicion.Add(Medicion);
             await _context.SaveChangesAsync();
@@ -64,7 +83,6 @@ namespace factoryApi.Repositories
             Medicion? Medicion = await _context.Medicion.FindAsync(id);
             if (Medicion != null)
             {
-                Medicion.IsDeleted = true;
                 _context.Medicion.Update(Medicion);
                 await _context.SaveChangesAsync();
             }

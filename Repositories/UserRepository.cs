@@ -10,62 +10,66 @@ namespace WeatherAPI.Repositories
         Task<List<User>> GetAll();
         Task<User?> GetUser(int id);
         Task<User> AddUser(
-            string UserName,
-            int UserAmount
+            string Nombre,
+            string Apellido,
+            string Correo,
+            string Contrasena
             );
-        Task<User> UpdateUser(User User);
+        Task<User> UpdateUser(User user);
         Task<User?> DeleteUser(int id);
     }
 
     public class UserRepository : IUserRepository
     {
-        private readonly FactoryDbContext _context;
+        private readonly AppDbContext _context;
 
-        public UserRepository(FactoryDbContext context)
+        public UserRepository(AppDbContext context)
         {
             _context = context;
         }
 
         public async Task<List<User>> GetAll()
         {
-            return await _context.ProductionCapacities.ToListAsync();
+            return await _context.User.ToListAsync();
         }
 
         public async Task<User?> GetUser(int id)
         {
-            return await _context.ProductionCapacities.FindAsync(id);
+            return await _context.User.FindAsync(id);
         }
 
         public async Task<User> AddUser(
-            string UserName,
-            int UserAmount
+            string Nombre,
+            string Apellido,
+            string Correo,
+            string Contrasena
         )
         {
             User User = new User
             {
-                UserName = UserName,
-                UserAmount = UserAmount,
-                IsDeleted = false
+                Nombre = Nombre,
+                Apellido = Apellido,
+                Correo = Correo,
+                Contrasena = Contrasena
             };
-            _context.ProductionCapacities.Add(User);
+            _context.User.Add(User);
             await _context.SaveChangesAsync();
             return User;
         }
 
         public async Task<User> UpdateUser(User User)
         {
-            _context.ProductionCapacities.Update(User);
+            _context.User.Update(User);
             await _context.SaveChangesAsync();
             return User;
         }
 
         public async Task<User?> DeleteUser(int id)
         {
-            User? User = await _context.ProductionCapacities.FindAsync(id);
+            User? User = await _context.User.FindAsync(id);
             if (User != null)
             {
-                User.IsDeleted = true;
-                _context.ProductionCapacities.Update(User);
+                _context.User.Update(User);
                 await _context.SaveChangesAsync();
             }
             return User;

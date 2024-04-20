@@ -16,7 +16,7 @@ namespace WeatherAPI.Model
         public required int EstadoId { get; set; }
 
         [ForeignKey("EstadoId")]
-        public required  Estado estado{ get; set; }
+        public Estado estado{ get; set; }
 
 
     }

@@ -10,8 +10,7 @@ namespace WeatherAPI.Repositories
         Task<List<Estado>> GetAll();
         Task<Estado?> GetEstado(int id);
         Task<Estado> AddEstado(
-            string EstadoActual,
-
+            string EstadoActual
             );
         Task<Estado> UpdateEstado(Estado Estado);
         Task<Estado?> DeleteEstado(int id);
@@ -37,14 +36,12 @@ namespace WeatherAPI.Repositories
         }
 
         public async Task<Estado> AddEstado(
-            string EstadoName,
-            int EstadoAmount
+            string EstadoActual
         )
         {
             Estado Estado = new Estado
             {
                 EstadoActual = EstadoActual,
-                IsDeleted = false
             };
             _context.Estado.Add(Estado);
             await _context.SaveChangesAsync();
@@ -63,7 +60,6 @@ namespace WeatherAPI.Repositories
             Estado? Estado = await _context.Estado.FindAsync(id);
             if (Estado != null)
             {
-                Estado.IsDeleted = true;
                 _context.Estado.Update(Estado);
                 await _context.SaveChangesAsync();
             }

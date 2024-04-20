@@ -41,10 +41,10 @@ namespace WeatherAPI.Repositories
             }
 
             public async Task<Analisis> AddAnalisis(
-                string AnalisisName,
-                DateTime AnalisisDate,
-                int ProductId,
-                int RegistrationActionId
+                DateTime Fecha,
+                string ResultadoAnalisis,
+                int MedicionId,
+                int UserId
             )
             {
                 Analisis analisis = new Analisis
@@ -53,7 +53,6 @@ namespace WeatherAPI.Repositories
                     ResultadoAnalisis = ResultadoAnalisis,
                     MedicionId = MedicionId,
                     UserId = UserId,
-                    IsDeleted = false
                 };
                 _context.Analisis.Add(analisis);
                 await _context.SaveChangesAsync();
@@ -75,7 +74,6 @@ namespace WeatherAPI.Repositories
                     return null;
                 }
 
-                analisis.IsDeleted = true;
                 _context.Entry(analisis).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return analisis;

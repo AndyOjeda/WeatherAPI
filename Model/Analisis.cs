@@ -15,9 +15,9 @@ namespace WeatherAPI.Model
         public required int UserId { get; set; }
 
         [ForeignKey("MedicionId")]
-        public required Medicion Medicion { get; set; }
+        public  Medicion medicion { get; set; }
 
         [ForeignKey("UserId")]
-        public required User User { get; set; }
+        public  User user { get; set; }
     }
 }

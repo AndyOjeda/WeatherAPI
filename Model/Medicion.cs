@@ -7,7 +7,7 @@ namespace WeatherAPI.Model
     public class Medicion
     {
         [Key] public int MedicionId { get; set; }
-        public required DateTime FechaMedicion { get; set; }
+        public  DateTime FechaMedicion { get; set; }
         public required float Temperatura { get; set; }
         public required float Humedad { get; set; }
         public required float Presion { get; set; }

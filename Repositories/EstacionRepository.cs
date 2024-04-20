@@ -1,6 +1,8 @@
 ﻿using WeatherAPI.Context;
 using WeatherAPI.Model;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
 
 namespace WeatherAPI.Repositories
 {
@@ -10,8 +12,10 @@ namespace WeatherAPI.Repositories
         Task<List<Estacion>> GetAll();
         Task<Estacion?> GetEstacion(int id);
         Task<Estacion> AddEstacion(
-            string EstacionName,
-            int EstacionAmount
+            string Nombre,
+            string Ubicacion,
+            string marca,
+            int EstadoId
             );
         Task<Estacion> UpdateEstacion(Estacion Estacion);
         Task<Estacion?> DeleteEstacion(int id);
@@ -37,9 +41,11 @@ namespace WeatherAPI.Repositories
         }
 
         public async Task<Estacion> AddEstacion(
-            string EstacionName,
-            int EstacionAmount
-        )
+                string Nombre,
+                string Ubicacion,
+                string marca,
+                int EstadoId
+                )
         {
             Estacion Estacion = new Estacion
             {
@@ -47,7 +53,6 @@ namespace WeatherAPI.Repositories
                 Ubicacion = Ubicacion,
                 marca = marca,
                 EstadoId = EstadoId,
-                IsDeleted = false
             };
             _context.Estacion.Add(Estacion);
             await _context.SaveChangesAsync();
@@ -66,7 +71,6 @@ namespace WeatherAPI.Repositories
             Estacion? Estacion = await _context.Estacion.FindAsync(id);
             if (Estacion != null)
             {
-                Estacion.IsDeleted = true;
                 _context.Estacion.Update(Estacion);
                 await _context.SaveChangesAsync();
             }
