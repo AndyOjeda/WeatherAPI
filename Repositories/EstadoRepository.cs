@@ -4,66 +4,56 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WeatherAPI.Repositories
 {
-
     public interface IEstadoRepository
     {
-        Task<List<Estado>> GetAll();
+        Task<IEnumerable<Estado>> GetEstados();
         Task<Estado?> GetEstado(int id);
-        Task<Estado> CreateEstado(
-            string EstadoActual
-            );
-        Task<Estado> UpdateEstado(Estado Estado);
+        Task<Estado> CreateEstado(Estado Estado);
+        Task<Estado> PutEstado(Estado Estado);
         Task<Estado?> DeleteEstado(int id);
     }
 
     public class EstadoRepository : IEstadoRepository
     {
-        private readonly AppDbContext _context;
-
-        public EstadoRepository(AppDbContext context)
+        private readonly AppDbContext _db;
+        public EstadoRepository(AppDbContext db)
         {
-            _context = context;
-        }
-
-        public async Task<List<Estado>> GetAll()
-        {
-            return await _context.Estado.ToListAsync();
+            _db = db;
         }
 
         public async Task<Estado?> GetEstado(int id)
         {
-            return await _context.Estado.FindAsync(id);
+            return await _db.Estado.FindAsync(id);
         }
 
-        public async Task<Estado> CreateEstado(
-            string EstadoActual
-        )
+        public async Task<IEnumerable<Estado>> GetEstados()
         {
-            Estado Estado = new Estado
-            {
-                EstadoActual = EstadoActual,
-            };
-            _context.Estado.Add(Estado);
-            await _context.SaveChangesAsync();
+            return await _db.Estado.ToListAsync();
+        }
+
+        public async Task<Estado> CreateEstado(Estado Estado)
+        {
+            _db.Estado.Add(Estado);
+            await _db.SaveChangesAsync();
             return Estado;
         }
 
-        public async Task<Estado> UpdateEstado(Estado Estado)
+        public async Task<Estado> PutEstado(Estado Estado)
         {
-            _context.Estado.Update(Estado);
-            await _context.SaveChangesAsync();
+            _db.Entry(Estado).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return Estado;
         }
 
         public async Task<Estado?> DeleteEstado(int id)
         {
-            Estado? Estado = await _context.Estado.FindAsync(id);
-            if (Estado != null)
-            {
-                _context.Estado.Update(Estado);
-                await _context.SaveChangesAsync();
-            }
+            Estado? Estado = await _db.Estado.FindAsync(id);
+            if (Estado == null) return Estado;
+            Estado.IsActive = false;
+            _db.Entry(Estado).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return Estado;
         }
+
     }
 }

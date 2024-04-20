@@ -1,106 +1,111 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using WeatherAPI.Context;
 using WeatherAPI.Model;
 using WeatherAPI.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace WeatherAPI.Servicios
+namespace WeatherAPI.Services
 {
     public interface IMedicionService
     {
-        Task<List<Medicion>> GetAll();
+        Task<IEnumerable<Medicion>> GetMedicions();
         Task<Medicion?> GetMedicion(int id);
-        Task<Medicion> CreateMedicion(DateTime Fecha, float Temperatura, float Humedad, float Presion, float Precipitacion, float RadiacionSolar, float VelocidadViento, float DireccionViento, int EstacionId);
-        Task<Medicion> UpdateMedicion(int MedicionId, DateTime Fecha, float Temperatura, float Humedad, float Presion, float Precipitacion, float RadiacionSolar, float VelocidadViento, float DireccionViento, int EstacionId);
+        Task<Medicion> CreateMedicion(
+            DateTime FechaMedicion,
+            int TemperaturaId,
+            int HumedadId,
+            int PresionId,
+            int PrecipitacionId,
+            int RadiacionSolarId,
+            int VelocidadVientoId,
+            int DireccionVientoId
+            );
+        Task<Medicion> PutMedicion(
+            int MaquinaRId,
+            DateTime? FechaMedicion,
+            int? TemperaturaId,
+            int? HumedadId,
+            int? PresionId,
+            int? PrecipitacionId,
+            int? RadiacionSolarId,
+            int? VelocidadVientoId,
+            int? DireccionVientoId
+            );
+
         Task<Medicion?> DeleteMedicion(int id);
     }
-
-    public class MedicionService : IMedicionService
+    public class MedicionService(IMedicionRepository MedicionRepository) : IMedicionService
     {
-        private readonly IMedicionRepository _medicionRepository;
-
-        public MedicionService(IMedicionRepository medicionRepository)
-        {
-            _medicionRepository = medicionRepository;
-        }
-
-        public async Task<List<Medicion>> GetAll()
-        {
-            return await _medicionRepository.GetAll();
-        }
-
         public async Task<Medicion?> GetMedicion(int id)
         {
-            return await _medicionRepository.GetMedicion(id);
+            return await MedicionRepository.GetMedicion(id);
         }
 
-        public async Task<Medicion> CreateMedicion(DateTime Fecha, float Temperatura, float Humedad, float Presion, float Precipitacion, float RadiacionSolar, float VelocidadViento, float DireccionViento, int EstacionId)
+        public async Task<IEnumerable<Medicion>> GetMedicions()
         {
-            return await _medicionRepository.CreateMedicion(Fecha, Temperatura, Humedad, Presion, Precipitacion, RadiacionSolar, VelocidadViento, DireccionViento, EstacionId);
+            return await MedicionRepository.GetMedicions();
         }
+        public async Task<Medicion> CreateMedicion(
+            DateTime FechaMedicion,
+            int TemperaturaId,
+            int HumedadId,
+            int PresionId,
+            int PrecipitacionId,
+            int RadiacionSolarId,
+            int VelocidadVientoId,
+            int DireccionVientoId
+            )
 
-        public async Task<Medicion> UpdateMedicion(int MedicionId, DateTime Fecha, float Temperatura, float Humedad, float Presion, float Precipitacion, float RadiacionSolar, float VelocidadViento, float DireccionViento, int EstacionId)
         {
-            Medicion? medicion = await _medicionRepository.GetMedicion(MedicionId);
-            if (medicion == null)
+            return await MedicionRepository.CreateMedicion(new Medicion
+            {
+                FechaMedicion = FechaMedicion,
+                TemperaturaId = TemperaturaId,
+                HumedadId = HumedadId,
+                PresionId = PresionId,
+                PrecipitacionId = PrecipitacionId,
+                RadiacionSolarId = RadiacionSolarId,
+                VelocidadVientoId = VelocidadVientoId,
+                DireccionVientoId = DireccionVientoId
+
+            });
+        }
+        public async Task<Medicion> PutMedicion(
+            int MaquinaRId,
+            DateTime? FechaMedicion,
+            int? TemperaturaId,
+            int? HumedadId,
+            int? PresionId,
+            int? PrecipitacionId,
+            int? RadiacionSolarId,
+            int? VelocidadVientoId,
+            int? DireccionVientoId
+                )
+        {
+            Medicion? newMedicion = await MedicionRepository.GetMedicion(MaquinaRId);
+            if (newMedicion == null)
             {
                 throw new Exception("Medicion no encontrada");
             }
-            if (EstacionId == 0)
+            else
             {
-                throw new Exception("EstacionId no puede ser 0");
+                newMedicion.FechaMedicion = FechaMedicion ?? newMedicion.FechaMedicion;
+                newMedicion.TemperaturaId = TemperaturaId ?? newMedicion.TemperaturaId;
+                newMedicion.HumedadId = HumedadId ?? newMedicion.HumedadId;
+                newMedicion.PresionId = PresionId ?? newMedicion.PresionId;
+                newMedicion.PrecipitacionId = PrecipitacionId ?? newMedicion.PrecipitacionId;
+                newMedicion.RadiacionSolarId = RadiacionSolarId ?? newMedicion.RadiacionSolarId;
+                newMedicion.VelocidadVientoId = VelocidadVientoId ?? newMedicion.VelocidadVientoId;
+                newMedicion.DireccionVientoId = DireccionVientoId ?? newMedicion.DireccionVientoId;
+                return await MedicionRepository.PutMedicion(newMedicion);
             }
-            if (Fecha == null)
-            {
-                throw new Exception("Fecha no puede ser nula");
-            }
-            if (Temperatura == 0)
-            {
-                throw new Exception("Temperatura no puede ser 0");
-            }
-            if (Humedad == 0)
-            {
-                throw new Exception("Humedad no puede ser 0");
-            }
-            if (Presion == 0)
-            {
-                throw new Exception("Presion no puede ser 0");
-            }
-            if (Precipitacion == 0)
-            {
-                throw new Exception("Precipitacion no puede ser 0");
-            }
-            if (RadiacionSolar == 0)
-            {
-                throw new Exception("RadiacionSolar no puede ser 0");
-            }
-            if (VelocidadViento == 0)
-            {
-                throw new Exception("VelocidadViento no puede ser 0");
-            }
-            if (DireccionViento == 0)
-            {
-                throw new Exception("DireccionViento no puede ser 0");
-            }
-            medicion.FechaMedicion = Fecha;
-            medicion.Temperatura = Temperatura;
-            medicion.Humedad = Humedad;
-            medicion.Presion = Presion;
-            medicion.Precipitacion = Precipitacion;
-            medicion.RadiacionSolar = RadiacionSolar;
-            medicion.VelocidadViento = VelocidadViento;
-            medicion.DireccionViento = DireccionViento;
-            medicion.EstacionId = EstacionId;
-
-            return await _medicionRepository.UpdateMedicion(medicion);
-
         }
-
-            
 
         public async Task<Medicion?> DeleteMedicion(int id)
         {
-            return await _medicionRepository.DeleteMedicion(id);
+            return await MedicionRepository.DeleteMedicion(id);
         }
+
     }
 }
+

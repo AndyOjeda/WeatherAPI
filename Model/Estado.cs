@@ -8,6 +8,7 @@ namespace WeatherAPI.Model
         //Estado Estacion 
         [Key] public  int EstadoId { get; set; }
         public required string EstadoActual { get; set; }
+        public bool IsActive { get; set; } = true;
 
     }
 }

@@ -11,13 +11,18 @@ namespace WeatherAPI.Model
         [Key] public int EstacionId { get; set; }
         public required string Nombre { get; set; }
         public required string Ubicacion { get; set; }
-        public required string marca { get; set; }
 
+
+        [ForeignKey(nameof(Medicion))]
+        public required int MedicionId { get; set; }
+
+        [ForeignKey(nameof(Estado))]
         public required int EstadoId { get; set; }
+        public bool IsActive { get; set; } = true;
 
-        [ForeignKey("EstadoId")]
-        public Estado estado{ get; set; }
 
+        public virtual Medicion? Medicion { get; set; }
+        public virtual Estado? Estado { get; set; }
 
     }
 }

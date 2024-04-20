@@ -1,78 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using WeatherAPI.Context;
 using WeatherAPI.Model;
 using WeatherAPI.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace WeatherAPI.Servicios
+namespace CORNWAY.Services
 {
     public interface IUserService
     {
-        Task<List<User>> GetAll();
+        Task<IEnumerable<User>> GetUsers();
         Task<User?> GetUser(int id);
-        Task<User> CreateUser(string Nombre,
+        Task<User> CreateUser(
+            string Nombre,
             string Apellido,
             string Correo,
-            string Contrasena);
-        Task<User> UpdateUser(int UserId, string Nombre,
-            string Apellido,
-            string Correo,
-            string Contrasena);
+            string Contrasena
+            );
+        Task<User> PutUser(
+            int UserId,
+            string? Nombre,
+            string? Apellido,
+            string? Correo,
+            string? Contrasena
+            );
+            
+
         Task<User?> DeleteUser(int id);
     }
-
-    public class UserService : IUserService
+    public class UserService(IUserRepository UserRepository) : IUserService
     {
-        private readonly IUserRepository _UserRepository;
-
-        public UserService(IUserRepository UserRepository)
-        {
-            _UserRepository = UserRepository;
-        }
-
-        public async Task<List<User>> GetAll()
-        {
-            return await _UserRepository.GetAll();
-        }
-
         public async Task<User?> GetUser(int id)
         {
-            return await _UserRepository.GetUser(id);
+            return await UserRepository.GetUser(id);
         }
 
+        public async Task<IEnumerable<User>> GetUsers()
+        {
+            return await UserRepository.GetUsers();
+        }
         public async Task<User> CreateUser(
             string Nombre,
             string Apellido,
             string Correo,
-            string Contrasena)
-        {
-            return await _UserRepository.CreateUser(Nombre, Apellido, Correo, Contrasena);
-        }
+            string Contrasena
+            )
 
-        public async Task<User> UpdateUser(int UserId, string Nombre,
-            string Apellido,
-            string Correo,
-            string Contrasena)
         {
-            User? User = await _UserRepository.GetUser(UserId);
-            if (User == null)
+            return await UserRepository.CreateUser(new User
             {
-                throw new Exception("User no encontrado");
+                Nombre = Nombre,
+                Apellido = Apellido,
+                Correo = Correo,
+                Contrasena = Contrasena
+            });
+        }
+        public async Task<User> PutUser(
+              int UserId,
+              string? Nombre,
+              string? Apellido,
+              string? Correo,
+              string? Contrasena
+              )
+
+        {
+            User? newUser = await UserRepository.GetUser(UserId);
+            if (newUser == null)
+            {
+                throw new Exception("User no encontrada");
             }
-
-            User.Nombre = Nombre;
-            User.Apellido = Apellido;
-            User.Correo = Correo;
-            User.Contrasena = Contrasena;
-
-            return await _UserRepository.UpdateUser(User);
+            else
+            {
+                newUser.Nombre = Nombre ?? newUser.Nombre;
+                newUser.Apellido = Apellido ?? newUser.Apellido;
+                newUser.Correo = Correo ?? newUser.Correo;
+                newUser.Contrasena = Contrasena ?? newUser.Contrasena;
+                return await UserRepository.PutUser(newUser);
+            }
         }
 
         public async Task<User?> DeleteUser(int id)
         {
-            return await _UserRepository.DeleteUser(id);
+            return await UserRepository.DeleteUser(id);
         }
+
     }
 }
-
 

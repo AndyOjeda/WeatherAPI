@@ -4,80 +4,56 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WeatherAPI.Repositories
 {
-
     public interface IAnalisisRepository
     {
-        Task<List<Analisis>> GetAll();
+        Task<IEnumerable<Analisis>> GetAnalisiss();
         Task<Analisis?> GetAnalisis(int id);
-
-        Task<Analisis> CreateAnalisis(
-
-            DateTime Fecha,
-            string ResultadoAnalisis,
-            int MedicionId,
-            int UserId
-        );
-
-        Task<Analisis> UpdateAnalisis(Analisis analisis);
+        Task<Analisis> CreateAnalisis(Analisis Analisis);
+        Task<Analisis> PutAnalisis(Analisis Analisis);
         Task<Analisis?> DeleteAnalisis(int id);
+    }
 
-        public class AnalisisRepository : IAnalisisRepository
+    public class AnalisisRepository : IAnalisisRepository
+    {
+        private readonly AppDbContext _db;
+        public AnalisisRepository(AppDbContext db)
         {
-            private readonly AppDbContext _context;
-
-            public AnalisisRepository(AppDbContext context)
-            {
-                _context = context;
-            }
-
-            public async Task<List<Analisis>> GetAll()
-            {
-                return await _context.Analisis.ToListAsync();
-            }
-
-            public async Task<Analisis?> GetAnalisis(int id)
-            {
-                return await _context.Analisis.FindAsync(id);
-            }
-
-            public async Task<Analisis> CreateAnalisis(
-                DateTime Fecha,
-                string ResultadoAnalisis,
-                int MedicionId,
-                int UserId
-            )
-            {
-                Analisis analisis = new Analisis
-                {
-                    Fecha = Fecha,
-                    ResultadoAnalisis = ResultadoAnalisis,
-                    MedicionId = MedicionId,
-                    UserId = UserId,
-                };
-                _context.Analisis.Add(analisis);
-                await _context.SaveChangesAsync();
-                return analisis;
-            }
-
-            public async Task<Analisis> UpdateAnalisis(Analisis analisis)
-            {
-                _context.Entry(analisis).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return analisis;
-            }
-
-            public async Task<Analisis?> DeleteAnalisis(int id)
-            {
-                Analisis? analisis = await _context.Analisis.FindAsync(id);
-                if (analisis == null)
-                {
-                    return null;
-                }
-
-                _context.Entry(analisis).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return analisis;
-            }
+            _db = db;
         }
+
+        public async Task<Analisis?> GetAnalisis(int id)
+        {
+            return await _db.Analisis.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Analisis>> GetAnalisiss()
+        {
+            return await _db.Analisis.ToListAsync();
+        }
+
+        public async Task<Analisis> CreateAnalisis(Analisis Analisis)
+        {
+            _db.Analisis.Add(Analisis);
+            await _db.SaveChangesAsync();
+            return Analisis;
+        }
+
+        public async Task<Analisis> PutAnalisis(Analisis Analisis)
+        {
+            _db.Entry(Analisis).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+            return Analisis;
+        }
+
+        public async Task<Analisis?> DeleteAnalisis(int id)
+        {
+            Analisis? Analisis = await _db.Analisis.FindAsync(id);
+            if (Analisis == null) return Analisis;
+            Analisis.IsActive = false;
+            _db.Entry(Analisis).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+            return Analisis;
+        }
+
     }
 }

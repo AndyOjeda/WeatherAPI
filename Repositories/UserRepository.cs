@@ -4,75 +4,56 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WeatherAPI.Repositories
 {
-
     public interface IUserRepository
     {
-        Task<List<User>> GetAll();
+        Task<IEnumerable<User>> GetUsers();
         Task<User?> GetUser(int id);
-        Task<User> CreateUser(
-            string Nombre,
-            string Apellido,
-            string Correo,
-            string Contrasena
-            );
-        Task<User> UpdateUser(User user);
+        Task<User> CreateUser(User User);
+        Task<User> PutUser(User User);
         Task<User?> DeleteUser(int id);
     }
 
     public class UserRepository : IUserRepository
     {
-        private readonly AppDbContext _context;
-
-        public UserRepository(AppDbContext context)
+        private readonly AppDbContext _db;
+        public UserRepository(AppDbContext db)
         {
-            _context = context;
-        }
-
-        public async Task<List<User>> GetAll()
-        {
-            return await _context.User.ToListAsync();
+            _db = db;
         }
 
         public async Task<User?> GetUser(int id)
         {
-            return await _context.User.FindAsync(id);
+            return await _db.User.FindAsync(id);
         }
 
-        public async Task<User> CreateUser(
-            string Nombre,
-            string Apellido,
-            string Correo,
-            string Contrasena
-        )
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            User User = new User
-            {
-                Nombre = Nombre,
-                Apellido = Apellido,
-                Correo = Correo,
-                Contrasena = Contrasena
-            };
-            _context.User.Add(User);
-            await _context.SaveChangesAsync();
+            return await _db.User.ToListAsync();
+        }
+
+        public async Task<User> CreateUser(User User)
+        {
+            _db.User.Add(User);
+            await _db.SaveChangesAsync();
             return User;
         }
 
-        public async Task<User> UpdateUser(User User)
+        public async Task<User> PutUser(User User)
         {
-            _context.User.Update(User);
-            await _context.SaveChangesAsync();
+            _db.Entry(User).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return User;
         }
 
         public async Task<User?> DeleteUser(int id)
         {
-            User? User = await _context.User.FindAsync(id);
-            if (User != null)
-            {
-                _context.User.Update(User);
-                await _context.SaveChangesAsync();
-            }
+            User? User = await _db.User.FindAsync(id);
+            if (User == null) return User;
+            User.IsActive = false;
+            _db.Entry(User).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return User;
         }
+
     }
 }

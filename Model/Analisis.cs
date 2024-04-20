@@ -11,13 +11,16 @@ namespace WeatherAPI.Model
         public int AnalisisId { get; set; }
         public required DateTime Fecha { get; set; }
         public required string ResultadoAnalisis { get; set; }
+
+        [ForeignKey(nameof(Medicion))]
         public required int MedicionId { get; set; }
+
+        [ForeignKey(nameof(User))]
         public required int UserId { get; set; }
+        public bool IsActive { get; set; } = true;
 
-        [ForeignKey("MedicionId")]
-        public  Medicion medicion { get; set; }
 
-        [ForeignKey("UserId")]
-        public  User user { get; set; }
+        public virtual Medicion? Medicion { get; set; }
+        public virtual User? User { get; set; }
     }
 }

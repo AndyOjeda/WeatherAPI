@@ -1,65 +1,86 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using WeatherAPI.Context;
 using WeatherAPI.Model;
 using WeatherAPI.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace WeatherAPI.Servicios
+namespace CORNWAY.Services
 {
     public interface IAnalisisService
     {
-        Task<List<Analisis>> GetAll();
+        Task<IEnumerable<Analisis>> GetAnalisiss();
         Task<Analisis?> GetAnalisis(int id);
-        Task<Analisis> CreateAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId);
-        Task<Analisis> UpdateAnalisis(int id, DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId);
+        Task<Analisis> CreateAnalisis(
+            DateTime Fecha,
+            string ResultadoAnalisis,
+            int MedicionId,
+            int UserId     
+            );
+        Task<Analisis> PutAnalisis(
+            DateTime? Fecha,
+            string? ResultadoAnalisis,
+            int? MedicionId,
+            int? UserId);
+
         Task<Analisis?> DeleteAnalisis(int id);
     }
-
-    public class AnalisisService : IAnalisisService
+    public class AnalisisService(IAnalisisRepository AnalisisRepository) : IAnalisisService
     {
-        private readonly IAnalisisRepository _analisisRepository;
-
-        public AnalisisService(IAnalisisRepository analisisRepository)
-        {
-            _analisisRepository = analisisRepository;
-        }
-
-        public async Task<List<Analisis>> GetAll()
-        {
-            return await _analisisRepository.GetAll();
-        }
-
         public async Task<Analisis?> GetAnalisis(int id)
         {
-            return await _analisisRepository.GetAnalisis(id);
+            return await AnalisisRepository.GetAnalisis(id);
         }
 
-        public async Task<Analisis> CreateAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId)
+        public async Task<IEnumerable<Analisis>> GetAnalisiss()
         {
-            return await _analisisRepository.CreateAnalisis(Fecha, ResultadoAnalisis, MedicionId, UserId);
+            return await AnalisisRepository.GetAnalisiss();
         }
+        public async Task<Analisis> CreateAnalisis(
+            DateTime Fecha,
+            string ResultadoAnalisis,
+            int MedicionId,
+            int UserId
+            )
 
-        public async Task<Analisis> UpdateAnalisis(int id, DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId)
         {
-            Analisis? analisis = await _analisisRepository.GetAnalisis(id);
-            if (analisis == null)
+            return await AnalisisRepository.CreateAnalisis(new Analisis
             {
-                throw new Exception("Analisis no encontrado");
+                Fecha = Fecha,
+                ResultadoAnalisis = ResultadoAnalisis,
+                MedicionId = MedicionId,
+                UserId = UserId   
+
+            });
+        }
+        public async Task<Analisis> PutAnalisis(
+              int AnalisisId,
+              DateTime? Fecha,
+              string? ResultadoAnalisis,
+              int? MedicionId,
+              int? UserId
+              )
+
+        {
+            Analisis? newAnalisis = await AnalisisRepository.GetAnalisis(AnalisisId);
+            if (newAnalisis == null)
+            {
+                throw new Exception("Analisis no encontrada");
             }
-
-            analisis.Fecha = Fecha;
-            analisis.ResultadoAnalisis = ResultadoAnalisis;
-            analisis.MedicionId = MedicionId;
-            analisis.UserId = UserId;
-
-            return await _analisisRepository.UpdateAnalisis(analisis);
+            else
+            {
+                newAnalisis.Fecha = Fecha ?? newAnalisis.Fecha;
+                newAnalisis.ResultadoAnalisis = ResultadoAnalisis ?? newAnalisis.ResultadoAnalisis;
+                newAnalisis.MedicionId = MedicionId ?? newAnalisis.MedicionId;
+                newAnalisis.UserId = UserId ?? newAnalisis.UserId;
+                return await AnalisisRepository.PutAnalisis(newAnalisis);
+            }
         }
 
         public async Task<Analisis?> DeleteAnalisis(int id)
         {
-            return await _analisisRepository.DeleteAnalisis(id);
+            return await AnalisisRepository.DeleteAnalisis(id);
         }
+
     }
 }
-
 

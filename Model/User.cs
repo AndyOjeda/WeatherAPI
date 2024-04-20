@@ -12,5 +12,6 @@ namespace WeatherAPI.Model
         public required string Apellido { get; set; }
         public required string Correo { get; set; }
         public required string Contrasena { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

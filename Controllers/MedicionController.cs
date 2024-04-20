@@ -1,59 +1,76 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WeatherAPI.Model;
+using WeatherAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using WeatherAPI.Servicios;
 
 namespace WeatherAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MedicionController(IMedicionService medicionService) : ControllerBase
+    public class MedicionController(IMedicionService MedicionService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetMedicions()
         {
-            IEnumerable<Medicion> mediciones = await medicionService.GetAll();
-            return Ok(mediciones);
+            IEnumerable<Medicion> Medicions = await MedicionService.GetMedicions();
+            return Ok(Medicions);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetMedicion(int id)
         {
-            Medicion? medicion = await medicionService.GetMedicion(id);
-            if (medicion == null)
+            Medicion? Medicion = await MedicionService.GetMedicion(id);
+            if (Medicion == null)
             {
                 return NotFound();
             }
-            return Ok(medicion);
+            return Ok(Medicion);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateMedicion(
             [Required] DateTime FechaMedicion,
-            [Required] float Temperatura,
-            [Required] float Humedad,
-            [Required] float Presion,
-            [Required] float Precipitacion,
-            [Required] float RadiacionSolar,
-            [Required] float VelocidadViento,
-            [Required] float DireccionViento,
-            [Required] int EstacionId
-            )
+            [Required] int TemperaturaId,
+            [Required] int HumedadId,
+            [Required] int PresionId,
+            [Required] int PrecipitacionId,
+            [Required] int RadiacionSolarId,
+            [Required] int VelocidadVientoId,
+            [Required] int DireccionVientoId
+
+         )
         {
-            var newMedicion = await medicionService.CreateMedicion(FechaMedicion, Temperatura, Humedad, Presion, Precipitacion, RadiacionSolar, VelocidadViento, DireccionViento, EstacionId);
+            var newMedicion = await MedicionService.CreateMedicion(FechaMedicion, TemperaturaId, HumedadId, PresionId, PrecipitacionId, RadiacionSolarId, VelocidadVientoId, DireccionVientoId);
             return CreatedAtAction(nameof(GetMedicion), new { id = newMedicion.MedicionId }, newMedicion);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> PutMedicion(
+            [Required] int MedicionId,
+            [Required] DateTime FechaMedicion,
+            [Required] int TemperaturaId,
+            [Required] int HumedadId,
+            [Required] int PresionId,
+            [Required] int PrecipitacionId,
+            [Required] int RadiacionSolarId,
+            [Required] int VelocidadVientoId,
+            [Required] int DireccionVientoId
 
-        [HttpDelete("{id:int}")]
+                       )
+        {
+            var newMedicion = await MedicionService.PutMedicion(MedicionId, FechaMedicion, TemperaturaId, HumedadId, PresionId, PrecipitacionId, RadiacionSolarId, VelocidadVientoId, DireccionVientoId);
+            return Ok(newMedicion);
+        }
+
+        [HttpDelete]
         public async Task<IActionResult> DeleteMedicion(int id)
         {
-            var medicion = await medicionService.DeleteMedicion(id);
-            if (medicion == null)
+            var Medicion = await MedicionService.DeleteMedicion(id);
+            if (Medicion == null)
             {
                 return NotFound();
             }
-            return Ok(medicion);
+            return Ok(Medicion);
         }
     }
 

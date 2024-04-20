@@ -1,64 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using WeatherAPI.Context;
 using WeatherAPI.Model;
 using WeatherAPI.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace WeatherAPI.Servicios
+namespace WeatherAPI.Services
 {
     public interface IEstadoService
     {
-        Task<List<Estado>> GetAll();
+        Task<IEnumerable<Estado>> GetEstados();
         Task<Estado?> GetEstado(int id);
-        Task<Estado> CreateEstado(string EstadoActual);
-        Task<Estado> UpdateEstado(int EstadoId, string EstadoActual);
+        Task<Estado> CreateEstado(
+            string EstadoActual
+            );
+        Task<Estado> PutEstado(
+            int EstadoId,
+            string? EstadoActual
+            );
+            
+
         Task<Estado?> DeleteEstado(int id);
     }
-
-    public class EstadoService : IEstadoService
+    public class EstadoService(IEstadoRepository EstadoRepository) : IEstadoService
     {
-        private readonly IEstadoRepository _estadoRepository;
-
-        public EstadoService(IEstadoRepository estadoRepository)
-        {
-            _estadoRepository = estadoRepository;
-        }
-
-        public async Task<List<Estado>> GetAll()
-        {
-            return await _estadoRepository.GetAll();
-        }
-
         public async Task<Estado?> GetEstado(int id)
         {
-            return await _estadoRepository.GetEstado(id);
+            return await EstadoRepository.GetEstado(id);
         }
 
-        public async Task<Estado> CreateEstado(string EstadoActual)
+        public async Task<IEnumerable<Estado>> GetEstados()
         {
-            return await _estadoRepository.CreateEstado(EstadoActual);
+            return await EstadoRepository.GetEstados();
         }
+        public async Task<Estado> CreateEstado(
+            string EstadoActual
+            )
 
-        public async Task<Estado> UpdateEstado(int EstadoId, string EstadoActual)
         {
-            if (EstadoActual == null)
+            return await EstadoRepository.CreateEstado(new Estado
             {
-                throw new ArgumentNullException(nameof(EstadoActual));
-            }
-            Estado? estado = await _estadoRepository.GetEstado(EstadoId);
-            if (estado == null)
+                EstadoActual = EstadoActual
+                
+            });
+        }
+        public async Task<Estado> PutEstado(
+              int EstadoId,
+              string? EstadoActual)
+        {
+            Estado? newEstado = await EstadoRepository.GetEstado(EstadoId);
+            if (newEstado == null)
             {
-                throw new Exception("Estado no encontrado");
+                throw new Exception("Estado no encontrada");
             }
-            estado.EstadoActual = EstadoActual;
-            return await _estadoRepository.UpdateEstado(estado);
-
-}
+            else
+            {
+                newEstado.EstadoActual = EstadoActual ?? newEstado.EstadoActual;
+                return await EstadoRepository.PutEstado(newEstado);
+            }
+        }
 
         public async Task<Estado?> DeleteEstado(int id)
         {
-            return await _estadoRepository.DeleteEstado(id);
+            return await EstadoRepository.DeleteEstado(id);
         }
+
     }
 }
 

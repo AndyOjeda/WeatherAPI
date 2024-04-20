@@ -4,90 +4,56 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WeatherAPI.Repositories
 {
-
     public interface IMedicionRepository
     {
-        Task<List<Medicion>> GetAll();
+        Task<IEnumerable<Medicion>> GetMedicions();
         Task<Medicion?> GetMedicion(int id);
-        Task<Medicion> CreateMedicion(
-            DateTime FechaMedicion,
-            float Temperatura,
-            float Humedad,
-            float Presion,
-            float Precipitacion,
-            float RadiacionSolar,
-            float VelocidadViento,
-            float DireccionViento,
-            int EstacionId
-            );
-        Task<Medicion> UpdateMedicion(Medicion Medicion);
+        Task<Medicion> CreateMedicion(Medicion Medicion);
+        Task<Medicion> PutMedicion(Medicion Medicion);
         Task<Medicion?> DeleteMedicion(int id);
     }
 
     public class MedicionRepository : IMedicionRepository
     {
-        private readonly AppDbContext _context;
-
-        public MedicionRepository(AppDbContext context)
+        private readonly AppDbContext _db;
+        public MedicionRepository(AppDbContext db)
         {
-            _context = context;
-        }
-
-        public async Task<List<Medicion>> GetAll()
-        {
-            return await _context.Medicion.ToListAsync();
+            _db = db;
         }
 
         public async Task<Medicion?> GetMedicion(int id)
         {
-            return await _context.Medicion.FindAsync(id);
+            return await _db.Medicion.FindAsync(id);
         }
 
-        public async Task<Medicion> CreateMedicion(
-            DateTime FechaMedicion,
-            float Temperatura,
-            float Humedad,
-            float Presion,
-            float Precipitacion,
-            float RadiacionSolar,
-            float VelocidadViento,
-            float DireccionViento,
-            int EstacionId
-        )
+        public async Task<IEnumerable<Medicion>> GetMedicions()
         {
-            Medicion Medicion = new Medicion
-            {
-                Temperatura = Temperatura,
-                Humedad = Humedad,
-                Presion = Presion,
-                Precipitacion = Precipitacion,
-                RadiacionSolar = RadiacionSolar,
-                VelocidadViento = VelocidadViento,
-                DireccionViento = DireccionViento,
-                EstacionId = EstacionId
+            return await _db.Medicion.ToListAsync();
+        }
 
-            };
-            _context.Medicion.Add(Medicion);
-            await _context.SaveChangesAsync();
+        public async Task<Medicion> CreateMedicion(Medicion Medicion)
+        {
+            _db.Medicion.Add(Medicion);
+            await _db.SaveChangesAsync();
             return Medicion;
         }
 
-        public async Task<Medicion> UpdateMedicion(Medicion Medicion)
+        public async Task<Medicion> PutMedicion(Medicion Medicion)
         {
-            _context.Medicion.Update(Medicion);
-            await _context.SaveChangesAsync();
+            _db.Entry(Medicion).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return Medicion;
         }
 
         public async Task<Medicion?> DeleteMedicion(int id)
         {
-            Medicion? Medicion = await _context.Medicion.FindAsync(id);
-            if (Medicion != null)
-            {
-                _context.Medicion.Update(Medicion);
-                await _context.SaveChangesAsync();
-            }
+            Medicion? Medicion = await _db.Medicion.FindAsync(id);
+            if (Medicion == null) return Medicion;
+            Medicion.IsActive = false;
+            _db.Entry(Medicion).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
             return Medicion;
         }
+
     }
 }
