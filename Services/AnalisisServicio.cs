@@ -10,16 +10,8 @@ namespace WeatherAPI.Servicios
     {
         Task<List<Analisis>> GetAll();
         Task<Analisis?> GetAnalisis(int id);
-        Task<Analisis> AddAnalisis(
-                        DateTime Fecha, 
-                        string ResultadoAnalisis, 
-                        int MedicionId, 
-                        int UserId);
-        Task<Analisis> UpdateAnalisis(
-                        DateTime Fecha, 
-                        string ResultadoAnalisis, 
-                        int MedicionId, 
-                        int UserId);
+        Task<Analisis> AddAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId);
+        Task<Analisis> UpdateAnalisis(int id, DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId);
         Task<Analisis?> DeleteAnalisis(int id);
     }
 
@@ -42,24 +34,12 @@ namespace WeatherAPI.Servicios
             return await _analisisRepository.GetAnalisis(id);
         }
 
-        public async Task<Analisis> AddAnalisis(
-                                    DateTime Fecha,
-                                    string ResultadoAnalisis,
-                                    int MedicionId,
-                                    int UserId)
+        public async Task<Analisis> AddAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId)
         {
-            return await _analisisRepository.AddAnalisis(
-                                               Fecha,
-                                               ResultadoAnalisis,
-                                               MedicionId,
-                                               UserId);
+            return await _analisisRepository.AddAnalisis(Fecha, ResultadoAnalisis, MedicionId, UserId);
         }
 
-        public async Task<Analisis> UpdateAnalisis(
-                                    DateTime Fecha, 
-                                    string ResultadoAnalisis, 
-                                    int MedicionId, 
-                                    int UserId)
+        public async Task<Analisis> UpdateAnalisis(int id, DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId)
         {
             Analisis? analisis = await _analisisRepository.GetAnalisis(id);
             if (analisis == null)
@@ -67,24 +47,11 @@ namespace WeatherAPI.Servicios
                 throw new Exception("Analisis no encontrado");
             }
 
-            if (Fecha != null)
-            {
-                analisis.Fecha = Fecha;
-            }
+            analisis.Fecha = Fecha;
+            analisis.ResultadoAnalisis = ResultadoAnalisis;
+            analisis.MedicionId = MedicionId;
+            analisis.UserId = UserId;
 
-            if (ResultadoAnalisis != null)
-            {
-                analisis.ResultadoAnalisis = ResultadoAnalisis;
-            }
-
-            if (MedicionId != null)
-            {
-                analisis.MedicionId = MedicionId;
-            }
-            if (UserId != null)
-            {
-                analisis.UserId = UserId;
-            }
             return await _analisisRepository.UpdateAnalisis(analisis);
         }
 
@@ -94,4 +61,5 @@ namespace WeatherAPI.Servicios
         }
     }
 }
+
 

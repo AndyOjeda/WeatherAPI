@@ -10,16 +10,8 @@ namespace WeatherAPI.Servicios
     {
         Task<List<Estacion>> GetAll();
         Task<Estacion?> GetEstacion(int id);
-        Task<Estacion> AddEstacion(
-                        string Nombre, 
-                        string Ubicacion, 
-                        string marca, 
-                        int EstadoId);
-        Task<Estacion> UpdateEstacion(
-                        string Nombre, 
-                        string Ubicacion, 
-                        string marca, 
-                        int EstadoId);
+        Task<Estacion> AddEstacion(string Nombre, string Ubicacion, string marca, int EstadoId);
+        Task<Estacion> UpdateEstacion(int id, string Nombre, string Ubicacion, string marca, int EstadoId); // Agregado 'id' como parámetro
         Task<Estacion?> DeleteEstacion(int id);
     }
 
@@ -42,26 +34,14 @@ namespace WeatherAPI.Servicios
             return await _estacionRepository.GetEstacion(id);
         }
 
-        public async Task<Estacion> AddEstacion(
-                                    string Nombre, 
-                                    string Ubicacion, 
-                                    string marca, 
-                                    int EstadoId)
+        public async Task<Estacion> AddEstacion(string Nombre, string Ubicacion, string marca, int EstadoId)
         {
-            return await _estacionRepository.AddEstacion(
-                                               Nombre, 
-                                               Ubicacion, 
-                                               marca, 
-                                               EstadoId);
+            return await _estacionRepository.AddEstacion(Nombre, Ubicacion, marca, EstadoId);
         }
 
-        public async Task<Estacion> UpdateEstacion(
-                                     string Nombre, 
-                                     string Ubicacion, 
-                                     string marca, 
-                                     int EstadoId)
+        public async Task<Estacion> UpdateEstacion(int id, string Nombre, string Ubicacion, string marca, int EstadoId)
         {
-            Estacion? estacion = await _estacionRepository.GetEstacion( id);
+            Estacion? estacion = await _estacionRepository.GetEstacion(id);
             if (estacion == null)
             {
                 throw new Exception("Estacion no encontrada");
@@ -91,4 +71,5 @@ namespace WeatherAPI.Servicios
         }
     }
 }
+
 
