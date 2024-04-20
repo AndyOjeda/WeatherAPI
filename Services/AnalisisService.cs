@@ -23,11 +23,11 @@ namespace WeatherAPI.Servicios
         Task<Analisis?> DeleteAnalisis(int id);
     }
 
-    public class AnalisisServicio : IAnalisisServicio
+    public class AnalisisService : IAnalisisServicio
     {
         private readonly IAnalisisRepository _analisisRepository;
 
-        public AnalisisServicio(IAnalisisRepository analisisRepository)
+        public AnalisisService(IAnalisisRepository analisisRepository)
         {
             _analisisRepository = analisisRepository;
         }
