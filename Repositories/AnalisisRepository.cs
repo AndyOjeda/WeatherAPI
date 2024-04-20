@@ -10,7 +10,7 @@ namespace WeatherAPI.Repositories
         Task<List<Analisis>> GetAll();
         Task<Analisis?> GetAnalisis(int id);
 
-        Task<Analisis> AddAnalisis(
+        Task<Analisis> CreateAnalisis(
 
             DateTime Fecha,
             string ResultadoAnalisis,
@@ -40,7 +40,7 @@ namespace WeatherAPI.Repositories
                 return await _context.Analisis.FindAsync(id);
             }
 
-            public async Task<Analisis> AddAnalisis(
+            public async Task<Analisis> CreateAnalisis(
                 DateTime Fecha,
                 string ResultadoAnalisis,
                 int MedicionId,

@@ -6,11 +6,11 @@ using WeatherAPI.Repositories;
 
 namespace WeatherAPI.Servicios
 {
-    public interface IEstacionServicio
+    public interface IEstacionService
     {
         Task<List<Estacion>> GetAll();
         Task<Estacion?> GetEstacion(int id);
-        Task<Estacion> AddEstacion(
+        Task<Estacion> CreateEstacion(
                         string Nombre, 
                         string Ubicacion, 
                         string marca, 
@@ -24,7 +24,7 @@ namespace WeatherAPI.Servicios
         Task<Estacion?> DeleteEstacion(int id);
     }
 
-    public class EstacionService : IEstacionServicio
+    public class EstacionService : IEstacionService
     {
         private readonly IEstacionRepository _estacionRepository;
 
@@ -43,13 +43,13 @@ namespace WeatherAPI.Servicios
             return await _estacionRepository.GetEstacion(id);
         }
 
-        public async Task<Estacion> AddEstacion(
+        public async Task<Estacion> CreateEstacion(
                                     string Nombre, 
                                     string Ubicacion, 
                                     string marca,
                                     int EstadoId)
         {
-            return await _estacionRepository.AddEstacion(
+            return await _estacionRepository.CreateEstacion(
                                                 Nombre, 
                                                 Ubicacion, 
                                                 marca, 

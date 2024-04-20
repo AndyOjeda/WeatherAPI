@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WeatherAPI.Model;
-using WeatherAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using WeatherAPI.Servicios;
 
 namespace WeatherAPI.Controllers
 {
@@ -10,9 +10,9 @@ namespace WeatherAPI.Controllers
     public class AnalisisController(IAnalisisService analisisService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetAnalisis()
+        public async Task<IActionResult> GetAll()
         {
-            IEnumerable<Analisis> analises = await analisisService.GetAnalisis();
+            IEnumerable<Analisis> analises = await analisisService.GetAll();
             return Ok(analises);
         }
 

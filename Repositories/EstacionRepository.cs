@@ -11,7 +11,7 @@ namespace WeatherAPI.Repositories
     {
         Task<List<Estacion>> GetAll();
         Task<Estacion?> GetEstacion(int id);
-        Task<Estacion> AddEstacion(
+        Task<Estacion> CreateEstacion(
             string Nombre,
             string Ubicacion,
             string marca,
@@ -40,7 +40,7 @@ namespace WeatherAPI.Repositories
             return await _context.Estacion.FindAsync(id);
         }
 
-        public async Task<Estacion> AddEstacion(
+        public async Task<Estacion> CreateEstacion(
                 string Nombre,
                 string Ubicacion,
                 string marca,

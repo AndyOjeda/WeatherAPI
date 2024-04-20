@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WeatherAPI.Model;
-using WeatherAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using WeatherAPI.Servicios;
+
 
 namespace WeatherAPI.Controllers
 {
@@ -10,9 +11,9 @@ namespace WeatherAPI.Controllers
     public class EstacionController(IEstacionService estacionService) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetEstaciones()
+        public async Task<IActionResult> GetAll()
         {
-            IEnumerable<Estacion> estaciones = await estacionService.GetEstaciones();
+            IEnumerable<Estacion> estaciones = await estacionService.GetAll();
             return Ok(estaciones);
         }
 
@@ -29,7 +30,7 @@ namespace WeatherAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateEstacion(
-            [Required] int Nombre,
+            [Required] string Nombre,
             [Required] string Ubicacion,
             [Required] string marca,
             [Required] int EstadoId  )

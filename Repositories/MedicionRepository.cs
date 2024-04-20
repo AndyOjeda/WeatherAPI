@@ -9,7 +9,7 @@ namespace WeatherAPI.Repositories
     {
         Task<List<Medicion>> GetAll();
         Task<Medicion?> GetMedicion(int id);
-        Task<Medicion> AddMedicion(
+        Task<Medicion> CreateMedicion(
             DateTime FechaMedicion,
             float Temperatura,
             float Humedad,
@@ -43,7 +43,8 @@ namespace WeatherAPI.Repositories
             return await _context.Medicion.FindAsync(id);
         }
 
-        public async Task<Medicion> AddMedicion(
+        public async Task<Medicion> CreateMedicion(
+            DateTime FechaMedicion,
             float Temperatura,
             float Humedad,
             float Presion,

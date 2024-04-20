@@ -9,7 +9,7 @@ namespace WeatherAPI.Repositories
     {
         Task<List<Estado>> GetAll();
         Task<Estado?> GetEstado(int id);
-        Task<Estado> AddEstado(
+        Task<Estado> CreateEstado(
             string EstadoActual
             );
         Task<Estado> UpdateEstado(Estado Estado);
@@ -35,7 +35,7 @@ namespace WeatherAPI.Repositories
             return await _context.Estado.FindAsync(id);
         }
 
-        public async Task<Estado> AddEstado(
+        public async Task<Estado> CreateEstado(
             string EstadoActual
         )
         {

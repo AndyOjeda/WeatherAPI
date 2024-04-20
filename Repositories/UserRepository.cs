@@ -9,7 +9,7 @@ namespace WeatherAPI.Repositories
     {
         Task<List<User>> GetAll();
         Task<User?> GetUser(int id);
-        Task<User> AddUser(
+        Task<User> CreateUser(
             string Nombre,
             string Apellido,
             string Correo,
@@ -38,7 +38,7 @@ namespace WeatherAPI.Repositories
             return await _context.User.FindAsync(id);
         }
 
-        public async Task<User> AddUser(
+        public async Task<User> CreateUser(
             string Nombre,
             string Apellido,
             string Correo,

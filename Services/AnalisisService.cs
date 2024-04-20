@@ -6,16 +6,16 @@ using WeatherAPI.Repositories;
 
 namespace WeatherAPI.Servicios
 {
-    public interface IAnalisisServicio
+    public interface IAnalisisService
     {
         Task<List<Analisis>> GetAll();
         Task<Analisis?> GetAnalisis(int id);
-        Task<Analisis> AddAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId);
+        Task<Analisis> CreateAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId);
         Task<Analisis> UpdateAnalisis(int id, DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId);
         Task<Analisis?> DeleteAnalisis(int id);
     }
 
-    public class AnalisisService : IAnalisisServicio
+    public class AnalisisService : IAnalisisService
     {
         private readonly IAnalisisRepository _analisisRepository;
 
@@ -34,9 +34,9 @@ namespace WeatherAPI.Servicios
             return await _analisisRepository.GetAnalisis(id);
         }
 
-        public async Task<Analisis> AddAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId)
+        public async Task<Analisis> CreateAnalisis(DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId)
         {
-            return await _analisisRepository.AddAnalisis(Fecha, ResultadoAnalisis, MedicionId, UserId);
+            return await _analisisRepository.CreateAnalisis(Fecha, ResultadoAnalisis, MedicionId, UserId);
         }
 
         public async Task<Analisis> UpdateAnalisis(int id, DateTime Fecha, string ResultadoAnalisis, int MedicionId, int UserId)
