@@ -4,7 +4,7 @@ using WeatherAPI.Model;
 using WeatherAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace CORNWAY.Services
+namespace WeatherAPI.Services
 {
     public interface IAnalisisService
     {
@@ -17,6 +17,7 @@ namespace CORNWAY.Services
             int UserId     
             );
         Task<Analisis> PutAnalisis(
+            int AnalisisId,
             DateTime? Fecha,
             string? ResultadoAnalisis,
             int? MedicionId,

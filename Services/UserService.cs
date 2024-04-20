@@ -4,7 +4,7 @@ using WeatherAPI.Model;
 using WeatherAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace CORNWAY.Services
+namespace WeatherAPI.Services
 {
     public interface IUserService
     {

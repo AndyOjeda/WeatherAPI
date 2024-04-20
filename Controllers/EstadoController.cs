@@ -2,7 +2,6 @@
 using WeatherAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 using WeatherAPI.Services;
-using WeatherAPI.Services;
 
 namespace WeatherAPI.Controllers
 {

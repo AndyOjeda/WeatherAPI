@@ -2,7 +2,6 @@
 using WeatherAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 using WeatherAPI.Services;
-using CORNWAY.Services;
 
 
 namespace WeatherAPI.Controllers
@@ -33,10 +32,10 @@ namespace WeatherAPI.Controllers
         public async Task<IActionResult> CreateEstacion(
             [Required] string Nombre,
             [Required] string Ubicacion,
-            [Required] string marca,
+            [Required] int MedicionId,
             [Required] int EstadoId)
         {
-            var newEstacion = await estacionService.CreateEstacion(Nombre, Ubicacion, marca, EstadoId);
+            var newEstacion = await estacionService.CreateEstacion(Nombre, Ubicacion, MedicionId, EstadoId);
             return CreatedAtAction(nameof(GetEstacion), new { id = newEstacion.EstacionId }, newEstacion);
         }
 
